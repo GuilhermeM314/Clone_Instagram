@@ -1,30 +1,53 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Feed from './src/pages/Feed';
-import { createStackNavigator } from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native'
+import React from "react";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+/* import Feed from "./src/pages/Feed"; */
+import { Feed, Login, CreateAcounnt } from "./src/pages";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 
-const Stack = createStackNavigator()
+/* const Stack = createStackNavigator(); */
 
-export default function App() {
-  return (
-    <View style={style.container}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Feed">
-          <Stack.Screen name="Feed" component={Feed} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </View>
-  );
-}
+const Auth = createStackNavigator();
+const Route = createStackNavigator();
 
-const style = StyleSheet.create(
-  {
-    container: {
-      flex: 1,
-      backgroundColor: '#fff' 
-    }
-  }
-)
+const AuthRoutes = () => (
+  <NavigationContainer>
+    <Route.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyle: { backgroundColor: "#312e38" },
+      }}
+    >
+      <Route.Screen name="SignIn" component={Login} />
+      <Route.Screen name="SignUp" component={CreateAcounnt} />
+      {/* <Auth.Screen name="SignUp" component={SignUp} /> */}
+    </Route.Navigator>
+  </NavigationContainer>
+);
 
+const AppRoutes = () => (
+  <NavigationContainer>
+    <Auth.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyle: { backgroundColor: "#312e38" },
+      }}
+    >
+      <Auth.Screen name="Dashboard" component={Feed} />
+    </Auth.Navigator>
+  </NavigationContainer>
+);
 
+export default Routes = () => {
+  const [loading, setLoading] = React.useState(false);
+  const [user, setUser] = React.useState(false);
+
+  if (loading)
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size={300} color="#999" />
+      </View>
+    );
+
+  return user ? <AppRoutes /> : <AuthRoutes />;
+};
