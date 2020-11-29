@@ -20,6 +20,7 @@ import {
   Description,
   Loading,
 } from "./styles";
+import { api } from "../../services/api";
 
 export const Feed = () => {
   const [error, setError] = useState("");
@@ -43,6 +44,11 @@ export const Feed = () => {
     //utilizar server.js no jsonserver
     //https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=1&limit=4
     //utilizar o server2.js no www.mockapi.io
+
+    const response = await api.get("/feed");
+
+    console.log(response);
+
     axios
       .get(
         `https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=${pageNumber}&limit=4`
