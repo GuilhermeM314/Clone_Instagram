@@ -29,11 +29,11 @@ const AppRoutes = () => (
   <NavigationContainer>
     <Auth.Navigator
       screenOptions={{
-        headerShown: false,
-        cardStyle: { backgroundColor: "#312e38" },
+        headerShown: true,
+        cardStyle: { backgroundColor: "#fff" },
       }}
     >
-      <Auth.Screen name="Dashboard" component={Feed} />
+      <Auth.Screen name="Feed do Instagram" component={Feed} />
     </Auth.Navigator>
   </NavigationContainer>
 );
