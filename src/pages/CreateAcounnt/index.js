@@ -46,7 +46,8 @@ export const CreateAcounnt = () => {
         const response = await fetch(
           `https://graph.facebook.com/me?access_token=${token}`
         );
-        console.log(response);
+
+        console.log(await response.json());
         Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
       } else {
         // type === 'cancel'
@@ -54,6 +55,34 @@ export const CreateAcounnt = () => {
     } catch ({ message }) {
       alert(`Facebook Login Error =>: ${message}`);
     }
+  }
+
+  async function getUserAsync() {
+    const { name } = await requestAsync("me");
+    console.log(`Hello ${name} 👋`);
+  }
+
+  // Request data from the Facebook Graph API.
+  // Learn more https://developers.facebook.com/docs/graph-api/using-graph-api/
+  async function requestAsync(path, token) {
+    let resolvedToken = token;
+    if (!token) {
+      const auth = await Facebook.getAuthenticationCredentialAsync();
+      if (!auth) {
+        throw new Error(
+          "User is not authenticated. Ensure `logInWithReadPermissionsAsync` has successfully resolved before attempting to use the FBSDK Graph API."
+        );
+      }
+      resolvedToken = auth.token;
+    }
+    const response = await fetch(
+      `https://graph.facebook.com/${path}?fields=birthday,email,address,name&access_token=${encodeURIComponent(
+        resolvedToken
+      )}`
+    );
+    const body = await response.json();
+    console.log(body);
+    return body;
   }
 
   return (
@@ -91,6 +120,9 @@ export const CreateAcounnt = () => {
             <Button colo="#fff">Cadastrar</Button>
             <Button colo="#fff" onPress={() => logIn()}>
               Facebook
+            </Button>
+            <Button colo="#fff" onPress={() => getUserAsync()}>
+              Facebook User
             </Button>
           </Container>
         </ScrollView>
