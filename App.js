@@ -5,13 +5,10 @@ import { Feed, Login, CreateAcounnt, Comments } from "./src/pages";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-
-
 /* const Stack = createStackNavigator(); */
 
 const Auth = createStackNavigator();
 const Route = createStackNavigator();
-
 
 const AuthRoutes = () => (
   <NavigationContainer>
@@ -43,24 +40,23 @@ const AppRoutes = () => (
 );
 
 export default Routes = () => {
-
-React.useEffect(()=>{
-  async function getUpdate() {
-    try {
-      const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
-        Alert('Você tem uma nova atualização')
-        await Updates.fetchUpdateAsync();
-        // ... notify user of update ...
-        await Updates.reloadAsync();
+  React.useEffect(() => {
+    async function getUpdate() {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          alert("Você tem uma nova atualização");
+          await Updates.fetchUpdateAsync();
+          // ... notify user of update ...
+          await Updates.reloadAsync();
+        }
+      } catch (e) {
+        alert("Não foi possivel atualizar seu aplicativo");
       }
-    } catch (e) {
-      Alert('Não foi possivel atualizar atualização')
     }
-  }
 
-  getUpdate()
-},[])
+    getUpdate();
+  }, []);
 
   const [loading, setLoading] = React.useState(false);
   const [user, setUser] = React.useState(true);
