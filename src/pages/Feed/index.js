@@ -6,10 +6,15 @@ import {
   View,
   ScrollView,
   TextInput,
+  Text,
 } from "react-native";
 import axios from "axios";
 import LazyImage from "../../components/LazyImage";
 import { AsyncStorage } from "react-native";
+
+import { AntDesign } from "@expo/vector-icons";
+
+import { useNavigation } from "@react-navigation/native";
 
 import {
   Container,
@@ -33,7 +38,21 @@ export const Feed = () => {
   const [text, setText] = useState("");
   const [comentarios, setComentarios] = useState([]);
 
+  const [likes, setLikes] = useState([]);
+
   const MAX_LENGTH = 250;
+
+  const navigation = useNavigation();
+
+  async function Like(postId) {
+    const response = await api.post('/likes', 
+      {
+        "curtida": "1",
+        "postId": postId
+      }
+    )
+    return response
+  }
 
   async function loadPage(pageNumber = page, shouldRefresh = false) {
     if (pageNumber === total) return;
@@ -44,19 +63,27 @@ export const Feed = () => {
     //utilizar server.js no jsonserver
     //https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=1&limit=4
     //utilizar o server2.js no www.mockapi.io
+    api.get('/feeds/1/likes')
+    .then((response) => {
+      const totalItems = response.headers["x-total-count"];
+      const data = response.data;
 
-    const response = await api.get("/feed");
+      setLoading(false);
+      setTotal(Math.floor(totalItems / 4));
+      setPage(pageNumber + 1);
+      setLikes(shouldRefresh ? data : [...likes, ...data]);
+    })
+    .catch((err) => {
+      setError(err.message);
+      setLoading(true);
+    });
 
-    console.log(response);
-
-    axios
-      .get(
-        `https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=${pageNumber}&limit=4`
-      )
+    api
+      .get(`/feeds?page=${pageNumber}&limit=4`)
       .then((response) => {
         const totalItems = response.headers["x-total-count"];
         const data = response.data;
-        //console.log(data)
+
         setLoading(false);
         setTotal(Math.floor(totalItems / 4));
         setPage(pageNumber + 1);
@@ -106,48 +133,66 @@ export const Feed = () => {
     return (
       <Post>
         <Header>
-          <Avatar source={{ uri: item.author.avatar }} />
-          <Name>{item.author.name}</Name>
+          <Avatar source={{ uri: item?.author?.avatar }} />
+          <Name>{item?.author?.name}</Name>
         </Header>
 
         <LazyImage
-          aspectRatio={item.aspectRatio}
-          shouldLoad={viewable.includes(item.id)}
-          smallSource={{ uri: item.small }}
-          source={{ uri: item.image }}
+          aspectRatio={item?.aspectRatio}
+          shouldLoad={viewable.includes(item?.id)}
+          smallSource={{ uri: item?.small }}
+          source={{ uri: item?.image }}
         />
 
-        <Description>
-          <Name>{item.author.name}</Name> {item.description}
+        <View style={{ flexDirection: "row" }}>
+          <>
+            <AntDesign name="heart" size={30} style={{ padding: 10 }} onPress={()=>Like(item.id)}/><Text>item</Text>
+          </>
+          <AntDesign
+            name="wechat"
+            size={30}
+            style={{ padding: 10 }}
+            onPress={() =>
+              navigation.navigate("Comentários do Instagram", {
+                itemId: item.id,
+                otherParam: "anything you want here",
+                postId: item.id
+              })
+            }
+          />
+        </View>
+
+        <Description style={{ flexDirection: "column" }}>
+          <Name>{item?.description}</Name>
         </Description>
-        {comentarios.map((comentario) => {
-          console.log(comentario);
+        {/* {comentarios.map((comentario) => {
           return (
-            <Description style={{ flexDirection: "row" }}>
-              {item.id === comentario.id ? comentario.text : ""}
+            <Description style={{ flexDirection: "column" }}>
+              <View>
+                <Text>aqui porra</Text>
+              </View>
             </Description>
           );
-        })}
+        })} */}
 
-        <TextInput
+        {/* <TextInput
           multiline={true}
           onChangeText={(text) => setText(text)}
           placeholder={"Comentários"}
           style={[styles.text]}
           maxLength={MAX_LENGTH}
           value={text}
-        />
+        /> */}
 
-        <Button
+        {/* <Button
           title="Salvar"
           onPress={() => {
-            console.log(item.id);
             setComentarios([...comentarios, { id: item.id, text: text }]);
-            console.log(comentarios);
+
             setText("");
           }}
           accessibilityLabel="Salvar"
-        ></Button>
+        ></Button> */}
       </Post>
     );
   };
@@ -164,7 +209,7 @@ export const Feed = () => {
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         ListFooterComponent={loading && <Loading />}
-        onViewableItemsChanged={handleViewableChanged}
+        /* onViewableItemsChanged={handleViewableChanged} */
         viewabilityConfig={{
           viewAreaCoveragePercentThreshold: 10,
         }}

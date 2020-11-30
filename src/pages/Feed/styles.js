@@ -1,11 +1,11 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
-export const Container = styled.View`
-  
-`;
+export const Container = styled.View``;
 
 export const Post = styled.View`
   margin-top: 10px;
+  border-bottom-color: red;
+  margin-bottom: 10px;
 `;
 
 export const Header = styled.View`
@@ -31,8 +31,8 @@ export const Description = styled.Text`
 `;
 
 export const Loading = styled.ActivityIndicator.attrs({
-  size: 'small',
-  color: '#999'
+  size: "small",
+  color: "#999",
 })`
   margin: 30px 0;
 `;
