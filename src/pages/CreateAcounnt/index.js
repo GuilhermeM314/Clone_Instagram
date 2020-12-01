@@ -9,7 +9,9 @@ import {
   Alert,
 } from "react-native";
 
-import { TextInput, Button, Card } from "react-native-paper";
+import { Context } from "../../context";
+
+import { TextInput, Button, Card, Snackbar } from "react-native-paper";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -23,8 +25,19 @@ import {
 } from "./styled";
 
 import logo from "./../../../assets/instagram.png";
+import { api } from "../../services/api";
 
 export const CreateAcounnt = () => {
+  const { loading, setLoading, isLogin, setIsLogin } = React.useContext(
+    Context
+  );
+
+  const [visible, setVisible] = React.useState(false);
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
   const navigation = useNavigation();
 
   async function logIn() {
@@ -60,6 +73,17 @@ export const CreateAcounnt = () => {
   async function getUserAsync() {
     const { name } = await requestAsync("me");
     console.log(`Hello ${name} 👋`);
+  }
+
+  async function createAcount() {
+    const response = await api.post("/user", {
+      name: "Diogenes",
+      email: "diogenes@email.com",
+      password: "1234",
+    });
+    onToggleSnackBar();
+    navigation.navigate("SignUp");
+    return response;
   }
 
   // Request data from the Facebook Graph API.
@@ -117,7 +141,9 @@ export const CreateAcounnt = () => {
               onChangeText={(text) => console.log(text)}
             />
 
-            <Button colo="#fff">Cadastrar</Button>
+            <Button colo="#fff" onPress={() => createAcount()}>
+              Cadastrar
+            </Button>
             <Button colo="#fff" onPress={() => logIn()}>
               Facebook
             </Button>
@@ -127,6 +153,19 @@ export const CreateAcounnt = () => {
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: "Undo",
+          onPress: () => {
+            // Do something
+          },
+        }}
+      >
+        Hey there! I'm a Snackbar.
+      </Snackbar>
 
       <CreateAccountButton onPress={() => navigation.navigate("SignIn")}>
         <CreateAccountButtonText>Já tenho uma conta</CreateAccountButtonText>

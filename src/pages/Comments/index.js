@@ -1,15 +1,32 @@
 import React from "react";
 import { View } from "react-native";
-import { Text, Avatar, Card, IconButton, Paragraph, Title, Button, TextInput  } from "react-native-paper";
+import {
+  Text,
+  Avatar,
+  Card,
+  IconButton,
+  Paragraph,
+  Title,
+  Button,
+  TextInput,
+} from "react-native-paper";
 import { api } from "../../services/api";
-
+import { Context } from "../../context";
 
 export const Comments = ({ route, navigation }) => {
+  const {
+    loading,
+    setLoading,
+    isLogin,
+    setIsLogin,
+    setUsuario,
+    usuario,
+  } = React.useContext(Context);
+
   const [comments, setComments] = React.useState([]);
-  const [comentario, setComentario] = React.useState('');
+  const [comentario, setComentario] = React.useState("");
   const { itemId, otherParam } = route.params;
   React.useEffect(() => {
-    
     getComments();
   }, []);
 
@@ -19,37 +36,40 @@ export const Comments = ({ route, navigation }) => {
   }
 
   async function Comment() {
-    const response = await api.post(`/feeds/${itemId}/comments`, 
-      {
-        "name": "foiiii",
-        "comment": comentario
-      }
-    )   
+    console.log(usuario);
+    const response = await api.post(`/feeds/${itemId}/comments`, {
+      name: usuario?.name,
+      comment: comentario,
+    });
 
-    return response
+    return response;
   }
 
-
   return (
-    <View style={{flex: 1}}> 
+    <View style={{ flex: 1 }}>
       {comments.map((item) => {
-        console.log(item)
+        console.log(item);
         return (
           <Card.Content>
             <Title>{item.name}</Title>
             <Paragraph>{item.comment}</Paragraph>
           </Card.Content>
-        )
+        );
       })}
-      <TextInput onChangeText={(text) => {
-        console.log(text)
-        setComentario(text)
-      }}/>
-      <Button onPress={()=>{
-        Comment()
-        getComments()
-        
-        }}>Comentar</Button>
+      <TextInput
+        onChangeText={(text) => {
+          console.log(text);
+          setComentario(text);
+        }}
+      />
+      <Button
+        onPress={() => {
+          Comment();
+          getComments();
+        }}
+      >
+        Comentar
+      </Button>
     </View>
   );
 };
