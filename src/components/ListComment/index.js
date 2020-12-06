@@ -19,8 +19,14 @@ export default function ListComment({ feed }) {
   }, []);
   return (
     <>
-      <Text>{comments[0]?.comment}</Text>
-      <Text>{comments[1]?.comment}</Text>
+      <Text>
+        <Text style={{ fontWeight: "bold" }}>{comments[0]?.name} </Text>
+        {comments[0]?.comment}
+      </Text>
+      <Text>
+        <Text style={{ fontWeight: "bold" }}>{comments[1]?.name} </Text>
+        {comments[1]?.comment}
+      </Text>
     </>
   );
 }
