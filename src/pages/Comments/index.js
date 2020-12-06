@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, KeyboardAvoidingView, ScrollView } from "react-native";
 import {
   Text,
   Avatar,
@@ -12,6 +12,8 @@ import {
 } from "react-native-paper";
 import { api } from "../../services/api";
 import { Context } from "../../context";
+
+import { Container } from "./styled";
 
 export const Comments = ({ route, navigation }) => {
   const {
@@ -46,30 +48,44 @@ export const Comments = ({ route, navigation }) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      {comments.map((item) => {
-        console.log(item);
-        return (
-          <Card.Content>
-            <Title>{item.name}</Title>
-            <Paragraph>{item.comment}</Paragraph>
-          </Card.Content>
-        );
-      })}
-      <TextInput
-        onChangeText={(text) => {
-          console.log(text);
-          setComentario(text);
-        }}
-      />
-      <Button
-        onPress={() => {
-          Comment();
-          getComments();
-        }}
+    <>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        enabled
       >
-        Comentar
-      </Button>
-    </View>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flex: 1 }}
+        >
+          <Container>
+            {comments.map((item) => {
+              console.log(item);
+              return (
+                <Card.Content>
+                  <Title>{item.name}</Title>
+                  <Paragraph>{item.comment}</Paragraph>
+                </Card.Content>
+              );
+            })}
+            <TextInput
+              style={{ width: "100%" }}
+              onChangeText={(text) => {
+                console.log(text);
+                setComentario(text);
+              }}
+            />
+            <Button
+              onPress={() => {
+                Comment();
+                getComments();
+              }}
+            >
+              Comentar
+            </Button>
+          </Container>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </>
   );
 };

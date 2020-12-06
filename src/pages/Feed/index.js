@@ -44,14 +44,23 @@ export const Feed = () => {
 
   const navigation = useNavigation();
 
+  React.useEffect(() => {
+    getLikes();
+  }, []);
+
+  async function getLikes() {
+    const response = await api.get("/likes");
+    console.log(response.data);
+    setLikes(response.data);
+  }
+
   async function Like(postId) {
-    const response = await api.post('/likes', 
-      {
-        "curtida": "1",
-        "postId": postId
-      }
-    )
-    return response
+    const response = await api.put(`/likes/${postId}`, {
+      curtida: "4",
+      postId: postId,
+    });
+    getLikes();
+    return response;
   }
 
   async function loadPage(pageNumber = page, shouldRefresh = false) {
@@ -63,20 +72,21 @@ export const Feed = () => {
     //utilizar server.js no jsonserver
     //https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=1&limit=4
     //utilizar o server2.js no www.mockapi.io
-    api.get('/feeds/1/likes')
-    .then((response) => {
-      const totalItems = response.headers["x-total-count"];
-      const data = response.data;
+    api
+      .get("/feeds/1/likes")
+      .then((response) => {
+        const totalItems = response.headers["x-total-count"];
+        const data = response.data;
 
-      setLoading(false);
-      setTotal(Math.floor(totalItems / 4));
-      setPage(pageNumber + 1);
-      setLikes(shouldRefresh ? data : [...likes, ...data]);
-    })
-    .catch((err) => {
-      setError(err.message);
-      setLoading(true);
-    });
+        setLoading(false);
+        setTotal(Math.floor(totalItems / 4));
+        setPage(pageNumber + 1);
+        /* setLikes(shouldRefresh ? data : [...likes, ...data]); */
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(true);
+      });
 
     api
       .get(`/feeds?page=${pageNumber}&limit=4`)
@@ -146,7 +156,13 @@ export const Feed = () => {
 
         <View style={{ flexDirection: "row" }}>
           <>
-            <AntDesign name="heart" size={30} style={{ padding: 10 }} onPress={()=>Like(item.id)}/><Text>item</Text>
+            <AntDesign
+              name="heart"
+              size={30}
+              style={{ padding: 10 }}
+              onPress={() => Like(item.id)}
+            />
+            <Text>{likes[1]?.curtida}</Text>
           </>
           <AntDesign
             name="wechat"
@@ -156,7 +172,7 @@ export const Feed = () => {
               navigation.navigate("Comentários do Instagram", {
                 itemId: item.id,
                 otherParam: "anything you want here",
-                postId: item.id
+                postId: item.id,
               })
             }
           />
