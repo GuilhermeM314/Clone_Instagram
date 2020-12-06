@@ -32,6 +32,11 @@ export const CreateAcounnt = () => {
     Context
   );
 
+  const [newUser, setNewUser] = React.useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [visible, setVisible] = React.useState(false);
 
   const onToggleSnackBar = () => setVisible(!visible);
@@ -77,9 +82,9 @@ export const CreateAcounnt = () => {
 
   async function createAcount() {
     const response = await api.post("/user", {
-      name: "Diogenes",
-      email: "diogenes@email.com",
-      password: "1234",
+      name: newUser.name,
+      email: newUser.email,
+      password: newUser.password,
     });
     onToggleSnackBar();
     navigation.navigate("SignUp");
@@ -128,17 +133,19 @@ export const CreateAcounnt = () => {
             <TextInput
               label="Nome"
               style={{ width: "100%" }}
-              onChangeText={(text) => console.log(text)}
+              onChangeText={(text) => setNewUser({ ...newUser, name: text })}
             />
             <TextInput
               label="Email"
               style={{ width: "100%" }}
-              onChangeText={(text) => console.log(text)}
+              onChangeText={(text) => setNewUser({ ...newUser, email: text })}
             />
             <TextInput
               label="Senha"
               style={{ width: "100%" }}
-              onChangeText={(text) => console.log(text)}
+              onChangeText={(text) =>
+                setNewUser({ ...newUser, password: text })
+              }
             />
 
             <Button colo="#fff" onPress={() => createAcount()}>

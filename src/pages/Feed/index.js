@@ -8,6 +8,7 @@ import {
   TextInput,
   Text,
 } from "react-native";
+import ListComment from "../../components/ListComment";
 import axios from "axios";
 import LazyImage from "../../components/LazyImage";
 import { AsyncStorage } from "react-native";
@@ -50,9 +51,15 @@ export const Feed = () => {
 
   async function getLikes() {
     const response = await api.get("/likes");
-    console.log(response.data);
+    /* console.log(response.data); */
     setLikes(response.data);
   }
+
+  /* async function getLikes() {
+    const response = await api.get("/feeds/1/comments");
+    console.log(response.data);
+    setLikes(response.data);
+  } */
 
   async function Like(postId) {
     const response = await api.put(`/likes/${postId}`, {
@@ -140,21 +147,18 @@ export const Feed = () => {
   }, []);
 
   const renderItem = ({ item }) => {
-    console.log(likes[6]?.curtida);
     return (
       <Post>
         <Header>
           <Avatar source={{ uri: item?.author?.avatar }} />
           <Name>{item?.author?.name}</Name>
         </Header>
-
         <LazyImage
           aspectRatio={item?.aspectRatio}
           shouldLoad={viewable.includes(item?.id)}
           smallSource={{ uri: item?.image }}
           source={{ uri: item?.image }}
         />
-
         <View style={{ flexDirection: "row" }}>
           <>
             <AntDesign
@@ -163,7 +167,7 @@ export const Feed = () => {
               style={{ padding: 10 }}
               onPress={() => Like(item.id)}
             />
-            <Text>{likes[6]?.curtida}</Text>
+            <Text>{likes[1]?.curtida}</Text>
           </>
           <AntDesign
             name="wechat"
@@ -178,20 +182,11 @@ export const Feed = () => {
             }
           />
         </View>
-
         <Description style={{ flexDirection: "column" }}>
           <Name>{item?.description}</Name>
         </Description>
-        {/* {comentarios.map((comentario) => {
-          return (
-            <Description style={{ flexDirection: "column" }}>
-              <View>
-                <Text>aqui porra</Text>
-              </View>
-            </Description>
-          );
-        })} */}
 
+        <ListComment feed={item.id} />
         {/* <TextInput
           multiline={true}
           onChangeText={(text) => setText(text)}
@@ -200,7 +195,6 @@ export const Feed = () => {
           maxLength={MAX_LENGTH}
           value={text}
         /> */}
-
         {/* <Button
           title="Salvar"
           onPress={() => {
@@ -239,16 +233,3 @@ export const Feed = () => {
     </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  text: {
-    fontSize: 30,
-    lineHeight: 33,
-    color: "#333333",
-    padding: 16,
-    paddingTop: 16,
-    minHeight: 170,
-    borderTopWidth: 1,
-    borderColor: "rgba(212,211,211, 0.3)",
-  },
-});
