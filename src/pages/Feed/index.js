@@ -140,6 +140,7 @@ export const Feed = () => {
   }, []);
 
   const renderItem = ({ item }) => {
+    console.log(likes[6]?.curtida);
     return (
       <Post>
         <Header>
@@ -150,7 +151,7 @@ export const Feed = () => {
         <LazyImage
           aspectRatio={item?.aspectRatio}
           shouldLoad={viewable.includes(item?.id)}
-          smallSource={{ uri: item?.small }}
+          smallSource={{ uri: item?.image }}
           source={{ uri: item?.image }}
         />
 
@@ -162,7 +163,7 @@ export const Feed = () => {
               style={{ padding: 10 }}
               onPress={() => Like(item.id)}
             />
-            <Text>{likes[1]?.curtida}</Text>
+            <Text>{likes[6]?.curtida}</Text>
           </>
           <AntDesign
             name="wechat"
