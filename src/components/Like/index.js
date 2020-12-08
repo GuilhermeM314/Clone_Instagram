@@ -17,7 +17,7 @@ export default function Like({ like }) {
 
   async function putLike(l) {
     const response = await api.put(`/likes/${like}`, {
-      curtida: l + 1,
+      curtida: Number(l) + 1,
     });
     setTimeout(() => {
       getComment();
