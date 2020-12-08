@@ -8,6 +8,7 @@ import {
   TextInput,
   Text,
 } from "react-native";
+import Likes from "../../components/Like";
 import ListComment from "../../components/ListComment";
 import axios from "axios";
 import LazyImage from "../../components/LazyImage";
@@ -160,15 +161,7 @@ export const Feed = () => {
           source={{ uri: item?.image }}
         />
         <View style={{ flexDirection: "row" }}>
-          <>
-            <AntDesign
-              name="heart"
-              size={30}
-              style={{ padding: 10 }}
-              onPress={() => Like(item.id)}
-            />
-            <Text>{likes[1]?.curtida}</Text>
-          </>
+          <Likes like={item?.id} />
           <AntDesign
             name="wechat"
             size={30}
