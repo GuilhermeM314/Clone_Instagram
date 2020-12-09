@@ -4,7 +4,7 @@ export const Context = React.createContext({});
 
 export const UserContext = ({ children }) => {
   const [loading, setLoading] = React.useState(false);
-  const [isLogin, setIsLogin] = React.useState(true);
+  const [isLogin, setIsLogin] = React.useState(false);
   const [usuario, setUsuario] = React.useState({
     nome: "",
     email: "",
