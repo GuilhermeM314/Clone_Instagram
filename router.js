@@ -13,6 +13,7 @@ const AuthRoutes = () => (
   <NavigationContainer>
     <Route.Navigator
       screenOptions={{
+        headerRight: true,
         headerShown: false,
         cardStyle: { backgroundColor: "#312e38" },
       }}

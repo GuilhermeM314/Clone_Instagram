@@ -1,10 +1,11 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { api } from "../../services/api";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function Like({ like }) {
   const [likes, setLikes] = React.useState();
+  const [deuLike, setDeuLike] = React.useState(false);
 
   React.useEffect(() => {
     getComment();
@@ -17,7 +18,7 @@ export default function Like({ like }) {
 
   async function putLike(l) {
     const response = await api.put(`/likes/${like}`, {
-      curtida: Number(l) + 1,
+      curtida: deuLike ? l - 1 : l + 1,
     });
     setTimeout(() => {
       getComment();
@@ -25,21 +26,24 @@ export default function Like({ like }) {
     return response;
   }
   return (
-    <>
+    <TouchableOpacity
+      onPress={() => {
+        setDeuLike(!deuLike);
+        putLike(likes?.curtida);
+        console.log(deuLike);
+      }}
+      style={{ marginTop: 10, marginLeft: 10 }}
+    >
       <AntDesign
-        onPress={() => {
-          putLike(likes?.curtida);
-        }}
-        style={{ marginTop: 10, marginLeft: 10 }}
-      >
-        <AntDesign
-          name="heart"
-          size={30}
-          style={{ padding: 10 }}
-          onPress={() => console.log("aaaaa")}
-        />
-        <Text style={{ fontSize: 20, marginLeft: 10 }}>{likes?.curtida}</Text>
-      </AntDesign>
-    </>
+        name="heart"
+        size={30}
+        color={deuLike ? "red" : "black"}
+        style={{ padding: 10 }}
+      />
+      <Text style={{ fontSize: 12, marginLeft: 10 }}>
+        <Text style={{ fontSize: 12, fontWeight: "bold" }}>Likes</Text>{" "}
+        {likes?.curtida}
+      </Text>
+    </TouchableOpacity>
   );
 }
