@@ -1,5 +1,21 @@
-# feedinstagram
+# API Utilizada:
+**https://5fc2ec039210060016869cd9.mockapi.io/api/v1/**
 
-Utilizar server.js no jsonserver com a url http://localhost:3000/feed?_expand=author&_limit=4&_page=1
-    
-Utilizar o server2.js no www.mockapi.io com a url https://5fa103ace21bab0016dfd97e.mockapi.io/api/v1/feed?page=1&limit=4
+# Endpoints:
+
+**[Posts](https://5fc2ec039210060016869cd9.mockapi.io/api/v1/feeds)**
+**[Likes](https://5fc2ec039210060016869cd9.mockapi.io/api/v1/likes)**
+**[Usuários](https://5fc2ec039210060016869cd9.mockapi.io/api/v1/user)**
+**[Comentários](https://5fc2ec039210060016869cd9.mockapi.io/api/v1/feeds/:idFeed/comments)**
+
+<h3>OBS: Substituir ":idFeed" por números inteiros</h3>
+
+# Contas cadastradas:
+
+**Professor**
+<h3>login: professor@email.com</h3>
+<h3>senha: 1234</h3>
+
+**Alunos**
+<h3>login: alunos@email.com</h3>
+<h3>senha: 1234</h3>
