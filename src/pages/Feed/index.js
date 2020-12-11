@@ -97,7 +97,7 @@ export const Feed = () => {
       });
 
     api
-      .get(`/feeds?page=${pageNumber}&limit=4`)
+      .get(`/feeds?page=${pageNumber}&limit=50`)
       .then((response) => {
         const totalItems = response.headers["x-total-count"];
         const data = response.data;
